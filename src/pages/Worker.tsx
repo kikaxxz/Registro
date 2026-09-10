@@ -119,7 +119,8 @@ export function Worker({ profile }: { profile: Profile }) {
         </fieldset>
         <p className="footnote">
           Se conservará la fecha y hora real de guardado junto al horario que
-          indiques. Los registros guardados no se sobrescriben.
+          indiques. Si necesitas corregir la entrada o salida posteriormente,
+          puedes hacerlo desde Historial.
         </p>
       </form>
     </section>

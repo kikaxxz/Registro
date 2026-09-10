@@ -19,16 +19,25 @@ export interface WorkSettings {
 }
 export interface Attendance {
   source?: "manual";
+
   submittedAt?: Timestamp;
+  updatedAt?: Timestamp;
+  edited?: boolean;
+
   id: string;
+
   employeeId: string;
   employeeName: string;
+
   date: Timestamp;
   entryTime: Timestamp;
   exitTime: Timestamp | null;
+
   status: "open" | "closed";
+
   workedMinutes: number | null;
   overtimeMinutes: number | null;
+
   policy: WorkSettings;
 }
 export interface ActiveShift {

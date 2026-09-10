@@ -213,13 +213,16 @@ export function History({
                   {exporting ? "Generando…" : "Exportar PDF"}
                 </button>
               </div>
-              <RecordTable records={records} showEmployee={boss} />
+              <RecordTable
+                records={records}
+                showEmployee={boss}
+                onUpdated={load}
+              />
             </div>
             <p className="footnote">
-              Los totales incluyen jornadas finalizadas, agrupadas por el día de
-              entrada. Los horarios declarados conservan la regla de horas extra
-              vigente al guardarse; las marcaciones anteriores, la vigente al
-              iniciarse.
+              Los totales descuentan automáticamente el período de almuerzo
+              comprendido entre las 12:00 y las 13:00. Los horarios son
+              declarativos y pueden corregirse posteriormente.
             </p>
           </>
         )
