@@ -145,9 +145,13 @@ export default {
           ),
         );
       if (route === "/attendance/save")
-        return json(await service.save(uid, body));
-      if (route === "/attendance/list")
-        return json(await service.list(uid, body));
+  return json(await service.save(uid, body));
+
+if (route === "/attendance/update")
+  return json(await service.update(uid, body));
+
+if (route === "/attendance/list")
+  return json(await service.list(uid, body));
       if (route === "/employees") return json(await service.employees(uid));
       if (route === "/settings/get") return json(await service.settings(uid));
       if (route === "/settings/set")

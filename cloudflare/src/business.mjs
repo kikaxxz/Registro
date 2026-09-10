@@ -120,6 +120,89 @@ export function businessService(store, changePassword) {
     });
     return { id };
   }
+
+  async function update(uid, body) {
+  const p = await profile(uid);
+
+  if (typeof body.id !== "string" || !body.id) {
+    fail("Registro inválido.", 400);
+  }
+
+  await store.transaction(async (tx) => {
+    const fresh = await tx.get(`users/${uid}`);
+    const existing = await tx.get(`attendance/${body.id}`);
+
+    if (!fresh?.activo || fresh.mustChangePassword) {
+      fail("Tu cuenta no puede modificar registros.");
+    }
+
+    if (!existing) {
+      fail("El registro ya no existe.", 404);
+    }
+
+    if (existing.source !== "manual") {
+      fail("Este registro no puede modificarse.", 409);
+    }
+
+    // Un trabajador solo puede modificar sus propios registros.
+    // El jefe puede modificar los de cualquier trabajador.
+    if (fresh.rol !== "jefe" && existing.employeeId !== uid) {
+      fail("Solo puedes modificar tus propios registros.");
+    }
+
+    const existingDate =
+      typeof existing.date === "string"
+        ? existing.date.slice(0, 10)
+        : "";
+
+    let times;
+
+    try {
+      times = manualTimes({
+        day: existingDate,
+        entry: body.entry,
+        exit: body.exit,
+        nextDay: body.nextDay,
+      });
+    } catch (e) {
+      fail(e.message, 400);
+    }
+
+    const updated = {
+      employeeId: existing.employeeId,
+      employeeName: existing.employeeName,
+      source: "manual",
+      status: "closed",
+
+      date: timestamp(times.date),
+      entryTime: timestamp(times.entryTime),
+      exitTime: timestamp(times.exitTime),
+
+      workedMinutes: null,
+      overtimeMinutes: null,
+
+      policy: existing.policy,
+      edited: true,
+    };
+
+    // submittedAt debe conservarse como Timestamp.
+    if (existing.submittedAt) {
+      updated.submittedAt = timestamp(existing.submittedAt);
+    }
+
+    tx.set(
+      `attendance/${body.id}`,
+      updated,
+      ["updatedAt"],
+    );
+  });
+
+  return {
+    updated: true,
+    id: body.id,
+  };
+}
+
   async function list(uid, body) {
     const p = await profile(uid);
     const { from, to } = body;
@@ -204,5 +287,14 @@ export function businessService(store, changePassword) {
     });
     return { saved: true };
   }
-  return { session, onboard, save, list, employees, settings, setSettings };
+  return {
+  session,
+  onboard,
+  save,
+  update,
+  list,
+  employees,
+  settings,
+  setSettings,
+};
 }
