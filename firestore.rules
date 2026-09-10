@@ -1,0 +1,10 @@
+rules_version = '2';
+// All application access is mediated by the Cloudflare Worker, which verifies
+// the Firebase session, onboarding state, ownership and role.
+// No direct browser reads/writes: application authorization stays in the Worker.
+// Trusted service account access is controlled by IAM and server validators.
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /{document=**} { allow read, write: if false; }
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "score": 4,
+  "summary": "Implementación local validada con firmas WebAuthn y emulador. No desplegada. La política protegida bloquea las escrituras directas y el servicio consume los desafíos con las marcaciones en una transacción. Falta validar despliegue, cuotas y autenticadores reales.",
+  "findings": [
+    {
+      "check": "Autoridad del dispositivo",
+      "severity": "moderate",
+      "issue": "Sin atestación se comprueba la posesión de una clave declarada no sincronizable, pero no su almacenamiento físico ni el fabricante.",
+      "recommendation": "Mantener aprobación presencial y no prometer inexportabilidad absoluta. Para hardware acreditado, añadir política y validación de atestación."
+    },
+    {
+      "check": "Disponibilidad",
+      "severity": "minor",
+      "issue": "El agotamiento de cuotas gratuitas o caída del verificador impide marcar a las cuentas protegidas.",
+      "recommendation": "Validar consumo durante el piloto. No habilitar una vía de escritura que evite la verificación."
+    }
+  ]
+}

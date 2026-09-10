@@ -1,0 +1,16 @@
+{
+  "$schema": "../node_modules/wrangler/config-schema.json",
+  "name": "registro-device-api",
+  "account_id": "872ae15e3af6309e76800b1be397bd0b",
+  "main": "src/index.mjs",
+  "compatibility_date": "2026-09-07",
+  "compatibility_flags": ["nodejs_compat"],
+  "workers_dev": true,
+  "preview_urls": false,
+  "observability": { "enabled": true, "head_sampling_rate": 0.1, "traces": { "enabled": true, "head_sampling_rate": 0.1 } },
+  "vars": {
+    "PROJECT_ID": "registro-elec",
+    "APP_ORIGIN": "https://registro-elec.web.app",
+    "RP_ID": "registro-elec.web.app"
+  }
+}
